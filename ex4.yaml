@@ -1,0 +1,19 @@
+---
+- name: ex2
+  hosts: app1
+
+  vars:
+    port_http: 8080
+    type: web
+    service:
+      web:
+        name: "Serveur apache"
+        rpm: httpd
+      db:
+        name: "Serveur Maria DB"
+        rpm: mariadb-server
+  
+  tasks:
+  - name: Afficher la variable
+    debug:
+      msg: "Le serveur à installer est {{ service[type]['name'] }} avec le package {{ service[type].rpm }}"

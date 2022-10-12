@@ -1,0 +1,36 @@
+---
+- name: Configuration du serveur MySQL
+  hosts: app2
+  become: yes
+  tasks:
+  - name: Installer serveur MariaDB
+    yum:
+      name: mariadb-server
+      state: present
+
+  - name: Activation et demarrage du service mariadb-server
+    systemd:
+      name: mariadb
+      state: started
+      enabled: yes
+
+  - name: installer MySQL-python
+    yum:
+      name: MySQL-python
+      state: present
+
+  - name: Create admin user'
+    mysql_user:
+      name: admin
+      password: '12345'
+      host: "localhost"
+      priv: '*.*:ALL,GRANT'
+      state: present
+
+  - name: creation de la base des données
+    mysql_db:
+      login_user: admin
+      login_password: 12345
+      name: sitedb
+      state: present
+

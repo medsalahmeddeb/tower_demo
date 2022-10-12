@@ -1,0 +1,9 @@
+---
+- name: ex2
+  hosts: app1
+  vars_files:
+  - vars/vars.yaml 
+  tasks:
+  - name: Afficher la variable
+    debug:
+      msg: "Le serveur à installer est {{ service[type]['name'] }} avec le package {{ service[type].rpm }}"

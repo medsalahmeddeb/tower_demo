@@ -1,0 +1,19 @@
+---
+- name: Les tags dans anible
+  hosts: webservers
+  become: true
+  tasks:
+  - yum: name="{{ item }}" state=installed
+    loop:
+       - httpd
+       - memcached
+    tags:
+    - packages
+  - template: src=templates/httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
+    tags:
+    - configuration
+
+  - debug: msg="Always runs"
+    tags:
+    - notification
+

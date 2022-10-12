@@ -1,0 +1,70 @@
+---
+- name: gestion du serveur MySQL
+  hosts: dbservers
+  become: yes
+  vars:
+    mysql_root_password: "password"
+  vars_files:
+  - vars/vars.yaml
+  tasks:
+  - name: installer le serveur mariadb-server sur serveur {{ ansible_distribution_file_variety }}
+    yum:
+      name: "{{ service[ansible_distribution_file_variety].rpm }}"
+      state: present
+    when: ansible_distribution_file_variety == "RedHat"
+
+  - name: installer le serveur mariadb-server sur serveur {{ ansible_distribution_file_variety }}
+    apt:
+      name: "{{ service[ansible_distribution_file_variety].rpm }}"
+      state: present
+    when: ansible_distribution_file_variety == "Debian"
+
+
+  - name: Démarrer et activer le service sur serveur {{ ansible_distribution_file_variety }}
+    systemd:
+      name: mariadb
+      state: started
+      enabled: yes
+    when: ansible_distribution_file_variety == "RedHat"
+
+  - name: Démarrer et activer le service sur serveur {{ ansible_distribution_file_variety }}
+    systemd:
+      name: mysql
+      state: started
+      enabled: yes
+    when: ansible_distribution_file_variety == "Debian"
+
+  - name: ajouter la dependence Python-MySQL
+
+    yum:
+      name: MySQL-python
+      state: present
+    when: ansible_distribution_file_variety == "RedHat"
+
+  - name: ajouter la dependence Python-MySQL
+    apt:
+      name: python-mysqldb
+      state: present
+      update_cache: yes
+    when: ansible_distribution_file_variety == "Debian"
+
+
+  - name: Créer l'utilisateur admin avec tout privilèges
+    mysql_user:
+      name: admin
+      password: "{{ mysql_root_password }}"
+      priv: '*.*:ALL'
+      state: present
+      host: "{{ item }}"
+    with_items:
+    - localhost
+    - ::1
+    - 127.0.0.1
+    - "{{ ansible_fqdn }}"
+    
+  - name: créationd e la BD sitedb
+    mysql_db:
+      name: sitedb
+      state: present
+      login_user: admin
+      login_password: "{{ mysql_root_password }}"

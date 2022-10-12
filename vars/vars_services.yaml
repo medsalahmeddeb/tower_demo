@@ -1,0 +1,9 @@
+---
+#type: web
+service:
+  web:
+    name: "Serveur apache"
+    rpm: httpd
+  db:
+    name: "Serveur Maria DB"
+    rpm: mysql-server

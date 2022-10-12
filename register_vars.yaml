@@ -1,0 +1,13 @@
+---
+- name: Installs a package and prints the result
+  hosts: dbservers
+  become: True 
+  tasks: 
+  - name: Install the package 
+    yum: 
+      name: mariadb 
+      state: present 
+      update_cache: yes 
+    register: install_result
+  - debug: 
+      msg:  "Le resultat est :  {{ install_result.results }}"

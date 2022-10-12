@@ -1,0 +1,23 @@
+#- hosts: db
+#  become: yes
+#  vars: 
+#    - mysql_user: "admin"
+#    - mysql_password: "Test_34535$"
+#    - mysql_dbname: "blog"
+#    - webserver_host: "192.168.60.5"
+#    - root_password: "Test_68670$" 
+
+#  roles:
+#    - medsalahmeddeb.database
+- hosts: app2
+  become: yes
+  vars: 
+    - mysql_user: "admin"
+    - mysql_password: "Test_34535$"
+    - mysql_dbname: "blog"
+    - db_host: "192.168.60.6"
+    - extra_packages_debian: ['php-curl', 'php-gd', 'php-mbstring'] 
+    - extra_packages_redhat: ['php-xml', 'php-gd', 'php-mbstring'] 
+
+  roles:
+    - medsalahmeddeb.web

@@ -1,0 +1,21 @@
+- hosts: all
+  become: true
+  vars_files:
+  - vars/vars_services.yaml
+  tasks:
+  - name: installer le serveur web sur centos
+    yum:
+      name: "{{ service['web'].rpm }}"
+      state: present
+    when:
+    - type == "web"
+    - ansible_distribution == "CentOS"
+  
+  - name: installer le serveur DB sur centos
+    yum:
+      name: "{{ service['db'].rpm }}"
+      state: present
+    when:
+    - type == "db"
+    - ansible_distribution == "CentOS"
+

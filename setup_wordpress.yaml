@@ -1,0 +1,43 @@
+---
+- name: Recupération de l'appli wordpress
+  hosts: app1
+  become: yes
+  tasks:
+  - name: télevreser le code vers l'hote app1
+    unarchive:
+      src:  https://wordpress.org/wordpress-6.0.2.tar.gz
+      dest: /var/www/html/
+      mode: 0755
+      remote_src: yes
+
+- name: gestion du serveur MySQL
+  hosts: dbservers
+  become: yes
+  tasks:
+  - name: installer le serveur mariadb-server
+    yum:
+      name: mariadb-server
+      state: present
+  - name: Démarrer et activer le service
+    systemd:
+      name: mariadb
+      state: started
+      enabled: yes
+  - name: ajouter la dependence Python-MySQL
+    yum:
+      name: MySQL-python
+      state: present
+  - name: Créer l'utilisateur admin avec tout privilèges
+    mysql_user:
+      name: admin
+      password: "password"
+      priv: '*.*:ALL'
+      state: present
+      host: localhost
+  - name: créationd e la BD sitedb
+    mysql_db:
+      name: sitedb
+      state: present
+      login_user: admin
+      login_password: "password"
+

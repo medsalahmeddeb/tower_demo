@@ -1,0 +1,10 @@
+---
+- name: check service
+  hosts: all
+  become: yes
+  tasks:
+  - name: check service
+    service:
+      name: "{{ service }}"
+      state: started
+      enabled: yes

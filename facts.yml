@@ -1,0 +1,7 @@
+---
+- name: Output facts within a playbook 
+  hosts: webservers 
+  tasks:
+  - name: Prints Ansible facts 
+    debug: 
+      msg: The default IPv4 address of {{ ansible_fqdn }} is {{ ansible_eth1.ipv4.address }}

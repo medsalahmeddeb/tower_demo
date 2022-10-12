@@ -1,0 +1,17 @@
+---
+- name: Load stdout of a command
+  gather_facts: no
+  hosts: all
+  vars:
+    my_env: "{{ lookup('pipe', 'date') }}"
+  tasks:
+    - name: show date
+      debug:
+        msg: "{{ my_env }}"
+    - name: sauvegarder la date dans les mahcines distantes
+      copy:
+        dest: /tmp/date.txt
+        content:
+          La date est  "{{ my_env }}"
+        mode: 400
+

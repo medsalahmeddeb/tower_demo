@@ -1,0 +1,9 @@
+---
+- hosts: webservers
+  vars :
+    cars: ['Mercedes','Ford','Nissan','BMW']
+  tasks:
+  - name: A loop example in Jinja 2
+    template:
+      src: cars.j2
+      dest: ~/file_cars.txt

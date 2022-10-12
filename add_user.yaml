@@ -1,0 +1,18 @@
+---
+- name: ajout utilisateur
+  hosts: app1
+  become: yes
+  vars:
+    shell: /bin/sh
+  vars_files:
+  - vars/vars_2.yaml
+  - vars/vars.yaml
+
+  tasks:
+  - name: Add user
+    user:
+      name: "{{ name }}"
+      group: "{{ group }}"
+      shell: "{{ shell }}"
+      home: "{{ home }}"
+      state: "{{ state }}"

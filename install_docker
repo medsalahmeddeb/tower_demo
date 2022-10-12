@@ -1,0 +1,12 @@
+---
+- name: installer docker via un role
+  hosts: app2
+  become: true
+  roles:
+  - geerlingguy.docker
+  tasks:
+  - name: Ajouter l'utilisateur vagrant dans le dgroupe docker
+    user:
+      name: vagrant
+      groups: docker
+      append: yes

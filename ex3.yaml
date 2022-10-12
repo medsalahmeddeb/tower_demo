@@ -1,0 +1,14 @@
+---
+- name: ex2
+  hosts: app1
+
+  vars:
+    port_http: 8080
+    service:
+      name: "Serveur apache"
+      rpm: httpd
+  
+  tasks:
+  - name: Afficher la variable
+    debug:
+      msg: "Le serveur à installer est {{ service['name'] }} avec le package {{ service.rpm }}"

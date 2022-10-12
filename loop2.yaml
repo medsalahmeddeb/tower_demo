@@ -1,0 +1,17 @@
+---
+- name: Loop 2
+  hosts: all
+  tasks:
+  - name: lister le contenu du dossier /home
+    command: ls /home
+    register: home_dirs
+
+#  - name: afficher le resultat
+#    debug: var=home_dirs
+
+  - name: Créer un lien symbolique
+    file:
+      path: /tmp/{{ item }}
+      src: /home/{{ item }}
+      state: link
+    loop: "{{ home_dirs.stdout_lines }}"

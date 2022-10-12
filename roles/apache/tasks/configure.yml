@@ -1,0 +1,11 @@
+- name: Copy httpd configuration file
+  template:
+    src: ../templates/httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+
+- name: Copy index.html file
+  copy:
+    src: ../files/index.html
+    dest: /var/www/html/
+  notify:
+  - restart apache

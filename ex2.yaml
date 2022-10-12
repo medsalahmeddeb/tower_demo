@@ -1,0 +1,11 @@
+---
+- name: ex2
+  hosts: all
+
+  vars:
+    port_http: 8080
+  
+  tasks:
+  - name: Afficher la variable
+    debug:
+      msg: "Le port à utiliser est  : {{ port_http }}"

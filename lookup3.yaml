@@ -1,0 +1,14 @@
+---
+- name: Read a file
+  gather_facts: no
+  hosts: all
+  vars:
+    my_file: "{{ lookup('file', 'test.txt') }}"
+  tasks:
+    - name: show test file content
+      debug:
+        msg: "{{ my_file }}"
+    - lineinfile:
+        path: /tmp/date.txt
+        regexp: EOF
+        line: "{{ my_file }}"

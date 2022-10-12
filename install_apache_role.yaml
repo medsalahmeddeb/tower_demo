@@ -1,0 +1,8 @@
+---
+- name:  installer le serveur web via un role
+  hosts: webservers
+  become: true
+  vars:
+    http_port: 8080
+  roles:
+  - apache

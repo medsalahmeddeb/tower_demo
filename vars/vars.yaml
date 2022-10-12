@@ -1,0 +1,16 @@
+---
+name: admin
+group: wheel
+shell: /bin/false
+home: /dev/null
+state: present
+    
+port_http: 8080
+type: web
+service:
+  RedHat:
+    name: "Serveur apache"
+    rpm: mariadb-server
+  Debian:
+    name: "Serveur Maria DB"
+    rpm: mysql-server

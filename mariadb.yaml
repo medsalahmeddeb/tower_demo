@@ -1,0 +1,21 @@
+---
+- name: MariaDB server installation 
+  hosts: all 
+  become: yes 
+  tasks: 
+  - name: Install latest MariaDB server when host RAM greater than 1GB 
+    yum: 
+      name: mariadb-server 
+      state: latest
+    when:
+    - ansible_memtotal_mb > 1024
+    - ansible_distribution_file_variety == "RedHat"
+
+  - name: Install latest MariaDB server when host RAM greater than 1GB
+    apt:
+      name: mysql-server
+      state: latest
+    when:
+    - ansible_memtotal_mb > 900
+    - ansible_distribution_file_variety == "Debian"
+

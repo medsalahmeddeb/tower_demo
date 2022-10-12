@@ -1,0 +1,16 @@
+---
+- name: Recupération de l'appli wordpress
+  hosts: app1
+  become: yes
+  tasks:
+ # - name: recupération du code
+ #   get_url:
+ #     url: https://wordpress.org/wordpress-6.0.2.tar.gz
+ #     dest: /tmp/wordpress.tar.gz
+
+  - name: télevreser le code vers l'hote app1
+    unarchive: 
+      src:  https://wordpress.org/wordpress-6.0.2.tar.gz 
+      dest: /var/www/html/
+      mode: 0755
+      remote_src: yes

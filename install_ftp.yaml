@@ -1,0 +1,10 @@
+---
+- name: Install insecure FTP server as long as not in production
+  hosts: webservers 
+  become: yes 
+  tasks:  
+  - name: Install FTP server if not in production 
+    yum: 
+      name: vsftpd 
+      state: latest
+    when: stage != "prod"

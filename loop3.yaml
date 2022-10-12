@@ -1,0 +1,14 @@
+---
+- name: créer des utilisateurs
+  hosts: app1
+  become: true
+  tasks:
+  - name: Créer des utilisateurs
+    user:
+      name: "{{  item.name  }}"
+      groups: "{{ item.groups }}"
+      state: present
+    loop:
+    - { name: 'jane' , groups: 'wheel'}
+    - { name: 'joe', groups: 'root' }
+

@@ -1,0 +1,42 @@
+---
+- name: Installer le serveur web apache 
+  hosts: webservers
+  become: true
+  vars:
+    port: 8080
+  tasks:
+  - name: Installer le service httpd
+    yum: 
+      name: httpd
+      state: present
+  - name: Demarrer le service httpd
+    systemd:
+      name: httpd
+      state: started
+      enabled: yes
+  - name: Copier le document index.html dans la racine du serveur web
+    copy:
+      src: index.html
+      dest: /var/www/html/
+#  - name: Copier le fichierd e configuration du serveur httpd
+#    copy:
+#      src: httpd.conf
+#      dest: /etc/httpd/conf/httpd.conf
+#    notify:
+#    - restart_httpd_server
+
+  - name: Modier le fichier de configuration
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^Listen'
+      insertafter: '^#Listen'
+      line: "Listen {{ port }}"
+    notify:
+     - restart_httpd_server 
+      
+
+  handlers:
+  - name: restart_httpd_server
+    systemd:
+      name: httpd
+      state: restarted

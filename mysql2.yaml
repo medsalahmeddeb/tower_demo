@@ -1,0 +1,49 @@
+---
+- name: Configuration du serveur MySQL
+  hosts: app2
+  become: yes
+  vars:
+    mysql_root_password: "password"
+  tasks:
+  - name: Installer serveur MariaDB
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+    - MySQL-python
+    - mariadb-server 
+
+  - name: Activation et demarrage du service mariadb-server
+    systemd:
+      name: mariadb
+      state: started
+      enabled: yes
+  - name: Create MySQL client config
+    copy:
+      dest: "/root/.my.cnf"
+      content: |
+        [client]
+        user=root
+        password={{ mysql_root_password }}
+      mode: 0400
+  - name: Create admin user
+    mysql_user:
+      name: root
+      password: "{{ mysql_root_password }}"
+      host: "{{ item }}"
+      priv: '*.*:ALL,GRANT'
+      state: present    
+#      login_unix_socket:  /var/lib/mysql/mysql.sock
+    with_items:
+      - "{{ ansible_hostname }}"
+      - 127.0.0.1
+      - ::1
+      - localhost
+
+  - name: creation de la base des données
+    mysql_db:
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      name: sitedb
+      state: present
+#      login_unix_socket:  /var/lib/mysql/mysql.sock
